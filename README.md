@@ -1,4 +1,4 @@
-### Hi there 👋
+### This is the implementation of Event-Driven RL
 
 <!--
 **Event-Driven-rl/Event-Driven-RL** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
