@@ -1,0 +1,77 @@
+base_dir: logs
+data:
+  batch_size: 256
+  data_name: hawkes
+  data_filename: data/8_normal_env/{}.pkl
+  process_dim: 8
+  use_cache: False
+  cache_dir: None
+  metrics: [type_acc, time_rmse]
+  buffer_size: 1000000
+  state_flag: 1
+  action_flag: 2
+  next_state_flag: 3
+
+model:
+  name: SAHP_MODEL
+  use_filter: False
+  # the number of events
+  process_dim: 8
+  hidden_dim: 32
+  # hybrid or loglikelihood
+  pred_method: hybrid
+  candidate_dim: 4
+  polyak: 0.99
+  alpha: 0.2
+  gamma: 0.1
+  value_parameter_sharing: True
+
+  # should be the same with data configs
+  state_flag: 1
+  action_flag: 2
+  next_state_flag: 3
+
+  # following three setting are activated when using loglikelihood
+  n_loss_integral_sample: 10
+  n_pred_integral_sample: 10
+  max_time_pred: 100
+
+  q_net: [128, 64, 1]
+  pi_net: [128, 64]
+  v_net: [128, 64, 1]
+
+
+train:
+  dropout_rate: 0.0
+  lr: 0.0001
+  epoch: 0
+  max_epoch: 1
+  lr_scheduler: PlateauLRScheduler
+  patience: 1000
+
+env:
+  emergent_event: 0
+  use_emergent: False
+  baseline: [0.7, 0.2, 0.4, 0.1, 0.1, 0.1, 0.1, 0.1]
+  omega: 1.0
+  candidate_dim: 4
+  horizon: 100
+  dt_intervene: 1
+  num_max_event: 70
+  target_intensity: [0.4, 0.3, 0.2, 0.1]
+  adjacency: [ [ 0.2, 0.1, 0.3, 0.1, 0.0, 0.0, 0.0, 0.0],
+               [ 0.1, 0.2, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0],
+               [ 0.3, -0.1, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0],
+               [ 0.1, -0.1, 0.3, 0.2, 0.0, 0.0, 0.0, 0.0],
+               [-0.2, 0.1, -0.3, 0.1, 0.1, 0.1, 0.2, 0.0],
+               [-0.1, -0.3, -0.1, -0.3, 0.2, 0.2, 0.3, 0.0],
+               [-0.4, 0.2, 0.3, 0.1, 0.1, 0.2, 0.1, 0.1],
+               [0.2, -0.1, -0.2, -0.3, 0.1, 0.2, 0.1, 0.2]]
+
+rl_train:
+  steps_per_epoch: 1000
+  epochs: 200
+  model_train_steps_per_epoch: 10
+
+tensorboard:
+  write_summary: True
